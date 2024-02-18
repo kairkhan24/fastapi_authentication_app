@@ -17,6 +17,42 @@
 `python -m pytest`
 
 
+## API docs
+
+
+**POST /api/users/register** - Register new user
+	
+_required fields: username, email, password_
+
+  responses:
+
+	422 - 'password too short or too long'
+	400 - 'Username is already taken.'
+	400 - 'Email is already taken.'
+ 
+	200 - {'success': true, 'user_id': '<user_id>'}
+
+**POST /api/users/auth** - Auth by username
+	
+_required fields: username, password_
+
+  responses:
+
+	401 - 'Invalid credentials'
+ 
+	200 - {'success': true, 'access_token': '<access_token>'}
+
+
+**GET /api/users/me** - Get user info by access_token
+
+    responses:
+	
+    400 - 'Invalid token'
+    400 - 'User not found'
+    
+    200 - {'username': '<username>', 'email': '<email>'}
+
+
 ### Demo
 
 
