@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: auth_app_postgres
+    image: postgres:13.1-alpine
+    volumes:
+      - auth_app_pg_data:/var/lib/postgresql/data
+      - auth_app_pg_data_backups:/backups
+#      - ./scripts/postgres:/scripts
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+
+  fastapi:
+    container_name: auth_app_fastapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+volumes:
+  auth_app_pg_data:
+    driver: "local"
+  auth_app_pg_data_backups:
+    driver: "local"
+
+networks:
+  default:
+    external: true
+    name: auth_external
